@@ -36,6 +36,10 @@ class ViewController: UIViewController {
         }
         return prec
     }
+    
+    func parseEquation(equat: String) {
+        
+    }
 
     
     @IBAction func tapNum(_ sender: UIButton) {
@@ -120,17 +124,25 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tapSwitchSign(_ sender: UIButton) {
-        if equationDisplay.text == "0" || isLastTapOperator {
+        let lastChar = equationDisplay.text?.characters.last
+        if equationDisplay.text == "0" || isLastTapOperator || lastChar == "-" || lastChar == "(" {
             isAlreadyTyping = true
             if equationDisplay.text == "0" {
                 equationDisplay.text = "-"
             } else {
-                let lastChar = equationDisplay.text?.characters.last
                 if lastChar == "-" {
-                    equationDisplay.text!.characters.removeLast()
-                    equationDisplay.text = equationDisplay.text! + "+"
+                    if equationDisplay.text == "-" {
+                        equationDisplay.text = "0"
+                    } else {
+                        equationDisplay.text!.characters.removeLast()
+                        equationDisplay.text = equationDisplay.text! + "+"
+                    }
+
                 }
-                else {
+                else if lastChar == "+"{
+                    equationDisplay.text!.characters.removeLast()
+                    equationDisplay.text = equationDisplay.text! + "-"
+                } else {
                     equationDisplay.text = equationDisplay.text! + "-"
                 }
             }
@@ -139,7 +151,13 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tapEquals(_ sender: UIButton) {
+        parseEquation(equat: equationDisplay.text!)
         
+        
+        
+        
+        nums = []
+        opers = []
     }
     
     
