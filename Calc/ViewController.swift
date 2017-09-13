@@ -37,8 +37,10 @@ class ViewController: UIViewController {
         return prec
     }
     
-    func parseEquation(equat: String) {
-        
+    func parseEquation(equat: String) -> String {
+        var output = ""
+        output = output + ""
+        return output
     }
 
     
@@ -93,18 +95,18 @@ class ViewController: UIViewController {
             hasDecimal = false
             if lastChar != ")" && lastChar != "1" && lastChar != "2" && lastChar != "3" && lastChar != "4" && lastChar != "5" && lastChar != "6" && lastChar != "7" && lastChar != "8" && lastChar != "9"{
                 if equationDisplay.text == "0" {
-                    equationDisplay.text = "("
+                    equationDisplay.text = " ( "
                     numParanLeft += 1
                 }  else if lastChar != "0"{
                     numParanLeft += 1
-                    equationDisplay.text = equationDisplay.text! + action!
+                    equationDisplay.text = equationDisplay.text! + " " + action! + " "
                 }
             }
         } else {
             if lastChar != "(" && lastChar != " " {
                 if numParanLeft > 0 {
                     numParanLeft -= 1
-                    equationDisplay.text = equationDisplay.text! + action!
+                    equationDisplay.text = equationDisplay.text! + " " + action! + " "
                     isLastTapOperator = false
                     hasDecimal = false
                 }
@@ -151,10 +153,11 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tapEquals(_ sender: UIButton) {
-        parseEquation(equat: equationDisplay.text!)
-        
-        
-        
+        if numParanLeft != 0 {
+            print("Please close all brackets")
+        }
+        let output = parseEquation(equat: equationDisplay.text!)
+        answerDisplay.text = output
         
         nums = []
         opers = []
