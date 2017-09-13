@@ -16,8 +16,10 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
     }
     
+    
     var isAlreadyTyping = false
     var isLastTapOperator = false
+    var hasDecimal = false
     var nums: [Float] = []
     var opers: [String] = []
     var numParanLeft = 0
@@ -25,36 +27,66 @@ class ViewController: UIViewController {
     @IBOutlet weak var answerDisplay: UILabel!
     @IBOutlet weak var equationDisplay: UILabel!
     
+    func precedence(oper: String) -> Int {
+        var prec = 0;
+        if oper == "+" || oper == "-" {
+            prec = 1
+        } else if oper == "x" || oper == "÷" {
+            prec = 2
+        }
+        return prec
+    }
+
+    
     @IBAction func tapNum(_ sender: UIButton) {
         isLastTapOperator = false
         if equationDisplay.text == "0" && sender.currentTitle == "0" {
             return
         }
+        if hasDecimal && sender.currentTitle == "." {
+            return
+        }
+        let lastChar = equationDisplay.text?.characters.last
         if isAlreadyTyping {
-            if equationDisplay.text?.characters.last != ")" {
+            if lastChar != ")" {
+                if sender.currentTitle == "." {
+                    hasDecimal = true
+                    if lastChar == "(" || lastChar == " "{
+                        equationDisplay.text = equationDisplay.text! + "0"
+                    }
+                }
                 equationDisplay.text = equationDisplay.text! + sender.currentTitle!
             }
         } else {
             isAlreadyTyping = true
-            equationDisplay.text = sender.currentTitle
+            if sender.currentTitle == "." {
+                equationDisplay.text = "0."
+                hasDecimal = true
+            } else {
+                equationDisplay.text = sender.currentTitle
+            }
         }
         
     }
     
     @IBAction func tapOperation(_ sender: UIButton) {
-        if isLastTapOperator == false && equationDisplay.text?.characters.last != "("{
+        if isLastTapOperator == false && equationDisplay.text?.characters.last != "(" && equationDisplay.text?.characters.last != "." {
             equationDisplay.text = equationDisplay.text! + " " + sender.currentTitle! + " "
             isLastTapOperator = true
             isAlreadyTyping = true
+            hasDecimal = false
         }
     }
     @IBAction func tapParanth(_ sender: UIButton) {
         let action = sender.currentTitle
         let lastChar = equationDisplay.text?.characters.last
+        if lastChar == "." {
+            return
+        }
         
         if action == "(" {
             isAlreadyTyping = true
-            
+            hasDecimal = false
             if lastChar != ")" && lastChar != "1" && lastChar != "2" && lastChar != "3" && lastChar != "4" && lastChar != "5" && lastChar != "6" && lastChar != "7" && lastChar != "8" && lastChar != "9"{
                 if equationDisplay.text == "0" {
                     equationDisplay.text = "("
@@ -70,6 +102,7 @@ class ViewController: UIViewController {
                     numParanLeft -= 1
                     equationDisplay.text = equationDisplay.text! + action!
                     isLastTapOperator = false
+                    hasDecimal = false
                 }
             }
             
@@ -82,6 +115,7 @@ class ViewController: UIViewController {
         equationDisplay.text = "0"
         isAlreadyTyping = false
         isLastTapOperator = false
+        hasDecimal = false
         numParanLeft = 0
     }
     
@@ -105,6 +139,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tapEquals(_ sender: UIButton) {
+        
     }
     
     
