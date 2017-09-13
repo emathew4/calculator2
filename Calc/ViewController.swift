@@ -30,8 +30,10 @@ class ViewController: UIViewController {
         if equationDisplay.text == "0" && sender.currentTitle == "0" {
             return
         }
-        if isAlreadyTyping{
-            equationDisplay.text = equationDisplay.text! + sender.currentTitle!
+        if isAlreadyTyping {
+            if equationDisplay.text?.characters.last != ")" {
+                equationDisplay.text = equationDisplay.text! + sender.currentTitle!
+            }
         } else {
             isAlreadyTyping = true
             equationDisplay.text = sender.currentTitle
@@ -63,7 +65,7 @@ class ViewController: UIViewController {
                 }
             }
         } else {
-            if lastChar != "(" {
+            if lastChar != "(" && lastChar != " " {
                 if numParanLeft > 0 {
                     numParanLeft -= 1
                     equationDisplay.text = equationDisplay.text! + action!
